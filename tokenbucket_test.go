@@ -25,7 +25,7 @@ func testWait(tb *TokenBucket, wait time.Duration, n int64) {
 	st := time.Now()
 	suc, fail := 0, 0
 	ch := make(chan int, 100)
-	for _ = range []int{1, 2, 3, 4, 5} {
+	for range []int{1, 2, 3, 4, 5} {
 		for i := 0; i < 500; i++ {
 			go func(ch chan int) {
 				res := tb.Wait(n, wait)
