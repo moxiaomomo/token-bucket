@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func test_Take(tb *TokenBucket, n int64) {
+func testTake(tb *TokenBucket, n int64) {
 	st := time.Now()
 	suc, fail := 0, 0
 	for i := 0; i < 10000000; i++ {
@@ -21,7 +21,7 @@ func test_Take(tb *TokenBucket, n int64) {
 		n, time.Now().Sub(st).String(), suc, fail)
 }
 
-func test_Wait(tb *TokenBucket, wait time.Duration, n int64) {
+func testWait(tb *TokenBucket, wait time.Duration, n int64) {
 	st := time.Now()
 	suc, fail := 0, 0
 	ch := make(chan int, 100)
@@ -59,22 +59,22 @@ func Test_tokenbucket(t *testing.T) {
 		return
 	}
 
-	test_Take(tb, 1)
+	testTake(tb, 1)
 
 	time.Sleep(time.Second)
-	test_Take(tb, 2)
+	testTake(tb, 2)
 
 	time.Sleep(time.Second)
-	test_Wait(tb, 100*time.Millisecond, 1)
+	testWait(tb, 100*time.Millisecond, 1)
 
 	time.Sleep(time.Second)
-	test_Wait(tb, 10*time.Second, 1)
+	testWait(tb, 10*time.Second, 1)
 
 	time.Sleep(time.Second)
-	test_Wait(tb, 100*time.Millisecond, 2)
+	testWait(tb, 100*time.Millisecond, 2)
 
 	time.Sleep(time.Second)
-	test_Wait(tb, 10*time.Second, 2)
+	testWait(tb, 10*time.Second, 2)
 
 	// limit to 2000 per second
 	tb, err = NewTokenBucket(2000, time.Second)
@@ -84,5 +84,5 @@ func Test_tokenbucket(t *testing.T) {
 	}
 
 	time.Sleep(time.Second)
-	test_Wait(tb, 10*time.Second, 2)
+	testWait(tb, 10*time.Second, 2)
 }

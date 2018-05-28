@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// token bucket struct for current-limiting
+// TokenBucket defines a struct for current-limiting
 type TokenBucket struct {
 	mutex    sync.Mutex
 	capacity int64
@@ -13,6 +13,7 @@ type TokenBucket struct {
 	tsQ      *Queue
 }
 
+// NewTokenBucket creates a new TokenBukcet instance or an error
 func NewTokenBucket(limit int64, interval time.Duration) (*TokenBucket, error) {
 	rqueue, err := NewQueue(limit)
 	if err != nil {
@@ -26,7 +27,7 @@ func NewTokenBucket(limit int64, interval time.Duration) (*TokenBucket, error) {
 	return tb, nil
 }
 
-// try to take n token-buckets
+// Take trys to take n token-buckets
 // return (true, waittime=0) if not limit reaches,
 // otherwise return (false, waittime>0)
 func (tb *TokenBucket) Take(n int64) (bool, time.Duration) {
@@ -51,7 +52,7 @@ func (tb *TokenBucket) Take(n int64) (bool, time.Duration) {
 	return false, tb.interval - now.Sub(oldest)
 }
 
-// wait for token-buckets until timeout,
+// Wait waits for token-buckets until timeout,
 // return true if take buckets succeeded,
 // else return false
 func (tb *TokenBucket) Wait(n int64, t time.Duration) bool {
