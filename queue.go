@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-// ring queue struct
+// Queue : ring queue struct
 type Queue struct {
 	mtx      sync.RWMutex
 	head     int64
@@ -15,9 +15,10 @@ type Queue struct {
 	data     []interface{}
 }
 
+// NewQueue returns a new Queue instance or an error
 func NewQueue(cap int64) (*Queue, error) {
 	if cap <= 0 {
-		return nil, errors.New("invalid capacity specified.")
+		return nil, errors.New("invalid capacity specified")
 	}
 	return &Queue{
 		capacity: cap,
@@ -25,7 +26,7 @@ func NewQueue(cap int64) (*Queue, error) {
 	}, nil
 }
 
-// check if queue is empty by element count
+// IsEmpty checks if queue is empty by element count
 func (q *Queue) IsEmpty() bool {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
@@ -33,7 +34,7 @@ func (q *Queue) IsEmpty() bool {
 	return q.elemcnt == 0
 }
 
-// check if queue is empty by element count
+// IsFull checks if queue is full by element count
 func (q *Queue) IsFull() bool {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
@@ -41,7 +42,7 @@ func (q *Queue) IsFull() bool {
 	return q.elemcnt >= q.capacity
 }
 
-// check if there's at least n block is not-used
+// Available checks if there's at least n block is not-used
 func (q *Queue) Available(n int64) bool {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
@@ -49,7 +50,7 @@ func (q *Queue) Available(n int64) bool {
 	return q.capacity-q.elemcnt >= n
 }
 
-// element count in queue
+// Len returns a element count of the queue
 func (q *Queue) Len() int64 {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
@@ -57,7 +58,7 @@ func (q *Queue) Len() int64 {
 	return q.elemcnt
 }
 
-// get the lastest element in queue
+// LastEnqueue returns the lastest element in queue
 func (q *Queue) LastEnqueue() interface{} {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
@@ -67,12 +68,11 @@ func (q *Queue) LastEnqueue() interface{} {
 	}
 	if q.head > 0 {
 		return q.data[q.head-1]
-	} else {
-		return q.data[q.capacity-1]
 	}
+	return q.data[q.capacity-1]
 }
 
-// get the oldest element in queue
+// FirstEnqueue returns the oldest element in queue
 func (q *Queue) FirstEnqueue() interface{} {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
@@ -83,7 +83,7 @@ func (q *Queue) FirstEnqueue() interface{} {
 	return q.data[q.tail]
 }
 
-// return all elements in queue
+// Data returns all elements in queue
 func (q *Queue) Data() []interface{} {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
@@ -102,7 +102,7 @@ func (q *Queue) Data() []interface{} {
 	return ret
 }
 
-// enqueue an element
+// EnqueueOne try to enqueue an element
 func (q *Queue) EnqueueOne(d interface{}) {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
@@ -127,6 +127,7 @@ func (q *Queue) EnqueueOne(d interface{}) {
 	}
 }
 
+// AtomEnqueue enqueue an element for n times
 func (q *Queue) AtomEnqueue(d interface{}, n int64) bool {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
@@ -138,7 +139,7 @@ func (q *Queue) AtomEnqueue(d interface{}, n int64) bool {
 	return true
 }
 
-// enqueue a list of element
+// EnqueueN enqueue a list of elements
 func (q *Queue) EnqueueN(data []interface{}) {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
@@ -161,7 +162,7 @@ func (q *Queue) EnqueueN(data []interface{}) {
 	}
 }
 
-// dequeue n elements
+// DequeueN dequeue a number of elements
 func (q *Queue) DequeueN(n int64) []interface{} {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
@@ -182,7 +183,7 @@ func (q *Queue) DequeueN(n int64) []interface{} {
 	return ret
 }
 
-// dequeue elements using a critier-function
+// DequeueBy dequeue elements using a critier-function
 func (q *Queue) DequeueBy(fc func(interface{}) bool) []interface{} {
 	q.mtx.Lock()
 	defer q.mtx.Unlock()
