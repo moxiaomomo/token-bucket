@@ -2,7 +2,9 @@
 
 [![Build Status](https://api.travis-ci.org/moxiaomomo/token-bucket.svg)](https://travis-ci.org/moxiaomomo/token-bucket)
 [![Go Report Card](https://goreportcard.com/badge/github.com/moxiaomomo/token-bucket)](https://goreportcard.com/report/github.com/moxiaomomo/token-bucket)
-结合环形队列(ring queue)和令牌桶(token bucket)算法实现的一个限流模块。
+
+结合环形队列(ring queue)和令牌桶(token bucket)算法实现的一个限流模块。<br>
+无额外goroutine, 无time.Ticker, 相对轻量。
 
 ### 测试用例
 
