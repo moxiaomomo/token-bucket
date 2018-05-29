@@ -13,8 +13,6 @@ type TokenBucket struct {
 	tsQ      *Queue
 }
 
-var count = 0
-
 func NewTokenBucket(limit int64, interval time.Duration) (*TokenBucket, error) {
 	rqueue, err := NewQueue(limit)
 	if err != nil {
