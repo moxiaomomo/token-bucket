@@ -1,7 +1,7 @@
 # token-bucket
 
 [![Build Status](https://api.travis-ci.org/moxiaomomo/token-bucket.svg)](https://travis-ci.org/moxiaomomo/token-bucket)
-
+[![Go Report Card](https://goreportcard.com/badge/github.com/moxiaomomo/token-bucket)](https://goreportcard.com/report/github.com/moxiaomomo/token-bucket)
 结合环形队列(ring queue)和令牌桶(token bucket)算法实现的一个限流模块。
 
 ### 测试用例
