@@ -1,5 +1,7 @@
 # token-bucket
 
+[![Build Status](https://api.travis-ci.org/moxiaomomo/token-bucket.svg)](https://travis-ci.org/moxiaomomo/token-bucket)
+
 结合环形队列和令牌桶算法实现的一个限流模块。
 
 ### 测试用例
