@@ -35,10 +35,6 @@ func (tb *TokenBucket) Take(n int64) (bool, time.Duration) {
 	defer tb.mutex.Unlock()
 
 	now := time.Now()
-	if tb.tsQ.AtomEnqueue(now, n) {
-		return true, 0
-	}
-
 	_ = tb.tsQ.DequeueBy(func(val interface{}) bool {
 		if v, ok := val.(time.Time); ok {
 			if now.Sub(v) >= tb.interval {
@@ -47,6 +43,10 @@ func (tb *TokenBucket) Take(n int64) (bool, time.Duration) {
 		}
 		return false
 	})
+
+	if tb.tsQ.AtomEnqueue(now, n) {
+		return true, 0
+	}
 
 	oldest, _ := tb.tsQ.FirstEnqueue().(time.Time)
 	return false, tb.interval - now.Sub(oldest)
